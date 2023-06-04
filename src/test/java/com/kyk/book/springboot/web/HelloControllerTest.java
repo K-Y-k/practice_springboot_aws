@@ -7,9 +7,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.is;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class) // 테스트를 진행할 때 JUnit에 내장된 실행자 외에 다른 실행자를 실행시킨다. 여기서는 SpringRunner(스프링부트 테스트와 JUnit 사이에 연결자 역할)를 실행
 @WebMvcTest(controllers = HelloController.class) // Web(Sping MVC)에 집중할 수 있는 어노테이션
@@ -26,6 +27,24 @@ public class HelloControllerTest {
         mvc.perform(get("/hello")) // MockMvc를 통해 /hello 주소로 HTTP GET 요청을 한다.
                 .andExpect(status().isOk()) // mvc.perform의 결과를 검증한다. HTTP 헤더의 Status를 검증한다. 200, 404, 500 등의 상태를 검증하는데 여기서는 Ok이므로 200인지 검증
                 .andExpect(content().string(hello)); // mvc.perform의 결과를 검증한다. 응답 본문의 내용을 검증한다. 해당 컨트롤러에서 "hello"를 반환하기에 이 값이 맞는지 검사
+    }
+
+    @Test
+    public void helloDto가_리턴된다() throws Exception {
+        String name = "hello";
+        int amount = 1000;
+
+        mvc.perform(
+                    get("/hello/dto")
+                            .param("aaa", name)  // .param은 API 테스트할 때 사용될 요청 파라미터를 설정한다.
+                            .param("123", String.valueOf(amount))) // 단, String 값만 허용된다.
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(name)))
+                .andExpect(jsonPath("$.amount", is(amount)));
+        // jsonPath는 JSON 응답 값을 필드별로 검증할 수 있는 메소드
+        // $를 기준으로 필드명을 명시한다.
+
+        // is 부분의 import를 import static org.hamcrest.Matchers.is;로 해야한다. 자동 import에는 없으니 주의
     }
 
 }

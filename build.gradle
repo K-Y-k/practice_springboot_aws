@@ -27,6 +27,7 @@ repositories {
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.projectlombok:lombok') // 롬복(Getter, Setter, 기본 생성자, toString 등을 어노테이션으로 자동 생성해줌) 등록
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
