@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor    // 기본 생성자 자동 추가
 @Entity               // 주요한 어노테이션 기준으로 가까이 둔다.
-public class Posts {  // 실제 DB 테이블과 매칭될 클래스
+public class Posts extends BaseTimeEntity {  // 실제 DB 테이블과 매칭될 클래스
 
     @Id // 해당 테이블의 PK 필드를 나타낸다.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // PK 생성 규칙을 나타낸다. GenerationType.IDENTITY 옵션을 추가해야만 auto increment가 된다.
@@ -60,4 +60,11 @@ public class Posts {  // 실제 DB 테이블과 매칭될 클래스
     //        .a(a)
     //        .b(b)
     //        .build()
+    
+    
+    // 연관 편의 메서드
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

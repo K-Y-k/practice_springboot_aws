@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -26,19 +27,50 @@ public class PostsRepositoryTest {
         postsRepository.deleteAll();
     }
 
+
+    @Test
+    public void BaseTimeEntity_등록_생성일_수정일_상속된_엔티티에_적용() {
+        // given
+        LocalDateTime now = LocalDateTime.of(2023, 6, 5, 0, 0, 0);
+
+        String title = "title";
+        String content = "content";
+
+        Posts post = Posts.builder()      // 빌더 패턴을 활용한 해당 값을 생성
+                .title(title)
+                .content(content)
+                .author("kyk")
+                .build();
+
+        postsRepository.save(post);       // 테이블 posts에 해당 id 값이 있다면 update, 없다면 insert 쿼리가 실행된다.
+
+        // when
+        List<Posts> postsList = postsRepository.findAll();
+
+        // then
+        Posts posts = postsList.get(0);
+
+        System.out.println(">> createDate=" + posts.getCreatedDate());
+        System.out.println(">> modifiedDate=" + posts.getModifiedDate());
+
+        assertThat(posts.getCreatedDate()).isAfter(now);
+        assertThat(posts.getModifiedDate()).isAfter(now);
+    }
+
+
     @Test
     public void 게시글저장_불러오기() {
         // given
         String title = "테스트 게시글";
         String content = "테스트 본문";
 
-        Posts post = Posts.builder()      // 빌더 패턴을 활용한 해당 값을 생성
+        Posts post = Posts.builder()
                 .title(title)
                 .content(content)
                 .author("kyk@naver.com")
                 .build();
 
-        postsRepository.save(post);       // 테이블 posts에 해당 id 값이 있다면 update, 없다면 insert 쿼리가 실행된다.
+        postsRepository.save(post);
 
         // when
         List<Posts> postsList = postsRepository.findAll();
