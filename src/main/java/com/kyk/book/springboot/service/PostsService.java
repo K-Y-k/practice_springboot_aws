@@ -2,6 +2,7 @@ package com.kyk.book.springboot.service;
 
 import com.kyk.book.springboot.domain.posts.Posts;
 import com.kyk.book.springboot.domain.posts.PostsRepository;
+import com.kyk.book.springboot.web.dto.PostsListResponseDto;
 import com.kyk.book.springboot.web.dto.PostsResponseDto;
 import com.kyk.book.springboot.web.dto.PostsSaveRequestDto;
 import com.kyk.book.springboot.web.dto.PostsUpdateRequestDto;
@@ -9,16 +10,27 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class PostsService {
     private final PostsRepository postsRepository;
 
+    /**
+     * 글 저장 기능
+     */
     public Long save(PostsSaveRequestDto requestDto) {
         Posts posts = requestDto.toEntity();
         return postsRepository.save(posts).getId();
     }
 
+
+    /**
+     * 글 수정 기능
+     */
     @Transactional
     public Long update(Long id, PostsUpdateRequestDto requestDto) {
         Posts posts = postsRepository.findById(id).orElseThrow(() ->
@@ -38,10 +50,35 @@ public class PostsService {
         return id;
     }
 
+    /**
+     * 글 일부 조회 기능
+     */
     public PostsResponseDto findById(Long id) {
         Posts entity = postsRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
         return new PostsResponseDto(entity);
     }
 
+
+    /**
+     * 글 전체 조회 기능
+     */
+    @Transactional(readOnly = true) // 트랜잭션 범위는 유지하되 조회 기능만 남겨두어 조회 속도를 개선한다. 즉, 조회 기능만 있으면 이 방식이 좋다.
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()// postsRepository 결과로 넘어온 Posts객체를
+                .map(PostsListResponseDto::new)      // Stream으로 map을 통해 PostsListResponseDto로 변환하고
+                .collect(Collectors.toList());       // List로 반환한다.
+    }
+
+
+    /**
+     * 글 삭제 기능
+     */
+    @Transactional
+    public void delete(Long id) {
+        Posts findPost = postsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        postsRepository.delete(findPost);
+    }
 }
