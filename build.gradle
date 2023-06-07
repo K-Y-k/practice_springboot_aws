@@ -23,6 +23,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -35,9 +36,12 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-oauth2-client') // 소셜 로그인 등 클라이언트 입장에서 소셜 기능 구현 시 필요한 의존성
     compile('org.springframework.session:spring-session-jdbc')            // 세션 저장소로 데이터베이스 사용하기 방식일 때의 필요한 의존성
     
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.boot:spring-boot-starter-test')      // 스프링 시큐리티 테스트를 위한 여러 도구를 지원하는 의존성
+    testCompile("org.springframework.security:spring-security-test")
 }
 
-test {
-    useJUnitPlatform()
-}
+
+// 해당 코드를 지워야 오른쪽 탭의 Gradle->Tasks->verification->test에서 정상 작동이 됨
+//test {
+//    useJUnitPlatform()
+//}
