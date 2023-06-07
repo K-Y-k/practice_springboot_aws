@@ -1,5 +1,6 @@
 package com.kyk.book.springboot.domain.posts;
 
+import com.kyk.book.springboot.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
