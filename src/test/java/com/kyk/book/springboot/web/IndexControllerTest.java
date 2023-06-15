@@ -28,7 +28,7 @@ public class IndexControllerTest {
         String body = this.restTemplate.getForObject("/", String.class);
 
         // then
-        assertThat(body).contains("스프링부트로 시작하는 웹 서비스 Ver.2");
+        assertThat(body).contains("스프링부트로 시작하는 웹 서비스 Ver.6");
     }
 
 
