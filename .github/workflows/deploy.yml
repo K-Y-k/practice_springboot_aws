@@ -62,6 +62,9 @@ jobs:
       shell: bash
 
     - name: Generate deployment package                   # 배포 자동화 설정
+      # mkdir -p before-deploy                     : S3로 특정 파일만 업로드가 안되기 때문에 디렉토리 단위로 업로드를 해야하므로 zip에 포함시킬 파일들을 담을 디렉토리 생성
+      # cp scripts/*.sh before-deploy/             : before-deploy에는 zip 파일에 포함시킬 파일들을 저장한다.
+      # cd before-deploy && zip -r before-deploy * : before-deploy로 이동 후 zip -r 명령어로 전체 압축
       run: |
         mkdir -p before-deploy
         cp scripts/*.sh before-deploy/
