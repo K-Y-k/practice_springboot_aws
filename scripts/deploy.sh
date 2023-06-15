@@ -12,8 +12,8 @@ echo "> 현재 구동중인 애플리케이션 pid 확인"
 # 현재 수행 중인 스프링 부트 애플리케이션의 프로세스 ID를 찾는다.
 # 실행 중이면 종료하기 위해서다.
 # 스프링 부트 애플리케이션 이름으로 된 다른 프로그램들이 있을 수 있어 해당 이름의 Jar 프로세스를 찾은 뒤 ID를 찾는다.
-CURRENT_PID=$(pgrep -f $PROJECT_NAME)
-#CURRENT_PID=$(pgrep -fl springboot_aws_practice | grep jar | awk '{print $1}')
+#CURRENT_PID=$(pgrep -f $PROJECT_NAME)
+CURRENT_PID=$(pgrep -fl springboot_aws_practice | grep jar | awk '{print $1}')
 #CURRENT_PID=$(pgrep -f ${PROJECT_NAME}.*.jar)
 
 echo "> 현재 구동중인 애플리케이션 pid: $CURRENT_PID"
