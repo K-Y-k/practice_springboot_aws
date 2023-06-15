@@ -2,7 +2,7 @@
 
 # 자주 사용하는 값 변수에 저장
 REPOSITORY=/home/ec2-user/app/step2
-PROJECT_NAME=springboot_aws_practice
+PROJECT_NAME=practice_springboot_aws
 
 # build의 결과물 (jar 파일) 특정 위치로 복사
 echo "> build 파일 복사"
@@ -13,7 +13,7 @@ echo "> 현재 구동중인 애플리케이션 pid 확인"
 # 실행 중이면 종료하기 위해서다.
 # 스프링 부트 애플리케이션 이름으로 된 다른 프로그램들이 있을 수 있어 해당 이름의 Jar 프로세스를 찾은 뒤 ID를 찾는다.
 #CURRENT_PID=$(pgrep -f $PROJECT_NAME)
-CURRENT_PID=$(pgrep -fl springboot_aws_practice | grep jar | awk '{print $1}')
+CURRENT_PID=$(pgrep -fl practice_springboot_aws | grep jar | awk '{print $1}')
 #CURRENT_PID=$(pgrep -f ${PROJECT_NAME}.*.jar)
 
 echo "> 현재 구동중인 애플리케이션 pid: $CURRENT_PID"
