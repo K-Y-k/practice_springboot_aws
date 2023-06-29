@@ -25,7 +25,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = delegate.loadUser(userRequest);
+        OAuth2User oAuth2User = delegate.loadUser(userRequest); // OAuth 서비스(kakao, google, naver)에서 가져온 유저 정보를 담고있음
 
         // 현재 로그인 진행 중인 서비스를 구분하는 코드
         // ex) 구글인지 네이버 로그인 연동 시에 서로 구분하기 위함
@@ -34,9 +34,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // OAuth2 로그인 진행 시 키가 되는 필드 값을 이야기한다. PK와 같은 의미
         // 구글의 경우 기본적으로 코드(="sub")를 지원하지만 네이버, 카카오 등은 기본 지원하지 않는다.
         // 즉, 네이버 로그인과 구글 로그인을 동시 지원할 때 사용된다.
-        String userNameAttributeName = userRequest.
-                getClientRegistration().getProviderDetails()
-                .getUserInfoEndpoint().getUserNameAttributeName();
+        String userNameAttributeName = userRequest.getClientRegistration()
+                                                  .getProviderDetails()
+                                                  .getUserInfoEndpoint()
+                                                  .getUserNameAttributeName();
 
         // OAuthAttributes은 OAuth2UserService를 통해 가져온 OAuth2User의 attribute를 담은 클래스
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
